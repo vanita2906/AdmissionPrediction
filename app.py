@@ -4,8 +4,8 @@ import pickle
 import numpy as np
 
 app = Flask(__name__)
-predictModel = pickle.load(open("Stress_model_save (1)","rb"))
-scaleModel = pickle.load(open("scaleModel","rb"))
+predictModel = pickle.load(open("admissionModel","rb"))
+scaleModel = pickle.load(open("scaleAdmissionModel","rb"))
 
 @app.route('/')
 def home():
@@ -17,17 +17,7 @@ def predict():
     
     int_features = [float(x) for x in request.form.values()]
     scaledValue = scaleModel.transform([int_features]) 
-    loadModel = pickle.load(open("Stress_model_save (1)","rb"))
-    result = loadModel.predict(scaledValue)    
-    if result[0]==0:
-        return render_template('index.html', pred='Your Stress level is Normal or Low')
-    elif result[0]==1:
-        return render_template('index.html', pred='Your Stress level is Medium low')
-    elif result[0]==2:
-        return render_template('index.html', pred='Your Stress level is Medium')
-    elif result[0]==3:
-        return render_template('index.html', pred='Your Stress level is Medium High')   
-    elif result[0]==4:
-        return render_template('index.html', pred='Your Stress level is High')   
+    result = predictModel.predict(scaledValue)    
+    return render_template('index.html', pred='Your chances of Admission Is',result[0],'%')   
 if __name__ == '__main__':
     app.run(debug=False)
