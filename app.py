@@ -18,6 +18,6 @@ def predict():
     int_features = [float(x) for x in request.form.values()]
     scaledValue = scaleModel.transform([int_features]) 
     result = predictModel.predict(scaledValue)    
-    return render_template('index.html', pred=f"Your chances of Admission is {result[0]}%.")   
+    return render_template('index.html', pred=f"Your chances of Admission is {result[0]*100}%.")   
 if __name__ == '__main__':
     app.run(debug=False)
